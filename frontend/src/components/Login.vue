@@ -1,4 +1,5 @@
 <template>
+  <AnimatedBackground />
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <form @submit.prevent="onLogin" class="bg-white p-8 rounded shadow-md w-80">
       <h2 class="text-2xl font-bold mb-6 text-center">Вход</h2>
@@ -18,6 +19,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import AnimatedBackground from './AnimatedBackground.vue';
 
 const username = ref('');
 const password = ref('');
