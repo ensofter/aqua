@@ -1,37 +1,51 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, onMounted } from 'vue'
+import LoginPage from './components/LoginPage.vue'
+import AdminPanel from './components/AdminPanel.vue'
+
+const isAuthenticated = ref(false)
+const credentials = ref<{ username: string; password: string } | null>(null)
+
+// Проверяем сохраненные учетные данные при загрузке
+onMounted(() => {
+  const saved = localStorage.getItem('admin_credentials')
+  if (saved) {
+    try {
+      credentials.value = JSON.parse(saved)
+      isAuthenticated.value = true
+    } catch (e) {
+      localStorage.removeItem('admin_credentials')
+    }
+  }
+})
+
+const handleLogin = (loginCredentials: { username: string; password: string }) => {
+  credentials.value = loginCredentials
+  isAuthenticated.value = true
+  localStorage.setItem('admin_credentials', JSON.stringify(loginCredentials))
+}
+
+const handleLogout = () => {
+  credentials.value = null
+  isAuthenticated.value = false
+  localStorage.removeItem('admin_credentials')
+}
 </script>
 
 <template>
-<div class="text-3xl text-blue-500">Tailwind работает!</div>
+  <div class="min-h-screen bg-gray-100">
+    <LoginPage 
+      v-if="!isAuthenticated" 
+      @login="handleLogin"
+    />
+    <AdminPanel 
+      v-else 
+      :credentials="credentials"
+      @logout="handleLogout"
+    />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+/* Глобальные стили можно добавить здесь */
 </style>
