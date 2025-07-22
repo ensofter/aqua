@@ -12,5 +12,8 @@
     "tailwindcss": "^4.1.11",
     "vitepress": "^0.1.1",
     "vue": "^3.3.4"
+  },
+  "dependencies": {
+    "vue-router": "^4.5.1"
   }
 }
